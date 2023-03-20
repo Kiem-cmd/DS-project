@@ -5,17 +5,6 @@ from googleapiclient.discovery import build
 from datetime import datetime
 
 st.set_page_config(page_title="My Streamlit App", page_icon=":guardsman:", layout="wide", initial_sidebar_state="expanded")
-st.markdown(
-    """
-<style>
-div.css-1r6slb0.e1tzin5v2 {
-    background-color: #EEEEEE;
-    border: 2px solid #CCCCCC;
-    padding: 5% 5% 5% 10%;
-    border-radius: 5px;
-}
-</style>
-    """, unsafe_allow_html=True)
 
 
 api_service_name = "youtube"
