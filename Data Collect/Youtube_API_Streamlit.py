@@ -3,6 +3,8 @@ import numpy as np
 import streamlit as st 
 from googleapiclient.discovery import build 
 from datetime import datetime
+import matplotlib.pyplot as plt
+import altair as alt
 
 st.set_page_config(page_title="My Streamlit App", page_icon=":guardsman:", layout="wide", initial_sidebar_state="expanded")
 
@@ -84,6 +86,7 @@ def video_statistic(video_id):
     }
     return video_data
 
+    
 st.header("Channel ID")
 custom_URL= st.text_input("",max_chars=2000)
 
@@ -100,5 +103,22 @@ if custom_URL:
     for i in video_ids:
         video_data.append(video_statistic(i))
     df = pd.DataFrame(video_data)
+    df['Month'] = [df['Publish At'][i][0][3:] for i in range(len(df))]
+    df['Month'] = pd.to_datetime(df['Month'], format='%m-%Y')
+    df['View Count'] = [int(df['View Count'][i][0]) for i in range(len(df))]
+    df = df.sort_values('Month')
+    a = df.groupby('Month')['View Count'].sum()
+    df_view = a.reset_index()
+    df_view = df_view.set_index('Month')
+    df_video = df.groupby('Month')['Title'].count().reset_index()
+    df_video = df_video.sort_values('Month')
+    df_video = df_video.set_index('Month')
+    st.subheader("Video Count")
+    st.line_chart(df_video)
+    # Display the chart using Streamlit
+    st.subheader("View Count")
+    st.line_chart(df_view)
+    
+
     st.dataframe(df)
     
